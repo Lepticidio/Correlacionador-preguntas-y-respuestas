@@ -12,18 +12,16 @@ namespace CorrelacionadorMir
         public int numero;
         public List<Pregunta> preguntas = new List<Pregunta>();
 
-        public Year (int number)
+        public Year(int number)
         {
             numero = number;
 
-            List<string> enunciados = ReadPreguntas("Mir/Preguntas" + number.ToString() +".txt");
+            List<string> enunciados = ReadPreguntas("Mir/Preguntas" + number.ToString() + ".txt");
             CreaPreguntas(enunciados);
             List<int[]> respuestas = ReadRespuestas("Mir/Respuestas" + number.ToString() + ".txt");
-            for (int i = 0; i< respuestas.Count; i++)
-            {
-                Console.WriteLine(respuestas[i][0].ToString() + "->" + respuestas[i][1].ToString());
-            }
-
+            verificadorRespuestas(preguntas, respuestas);
+            
+            Console.ReadLine();
         }
         private void WriteFile(String[] content, String _filename)
         {
@@ -74,11 +72,11 @@ namespace CorrelacionadorMir
             for (int i = 0; i < content.Length; i++)
             {
 
-                string[] lineaDividida =  content[i].Split('\t');
-                for (int j= 0; j< lineaDividida.Length; j += 2)
+                string[] lineaDividida = content[i].Split('\t');
+                for (int j = 0; j < lineaDividida.Length; j += 2)
                 {
                     int number;
-                    if (int.TryParse (lineaDividida[j + 1], out number))
+                    if (int.TryParse(lineaDividida[j + 1], out number))
                     {
                         int[] lineaRespuesta = { int.Parse(lineaDividida[j]), number };
                         listaRespuestas.Add(lineaRespuesta);
@@ -94,12 +92,12 @@ namespace CorrelacionadorMir
             }
             List<int[]> listaOrdenada = new List<int[]>();
             listaOrdenada.Add(listaRespuestas[0]);
-            for (int i = 1; i< listaRespuestas.Count; i++)
+            for (int i = 1; i < listaRespuestas.Count; i++)
             {
                 bool added = false;
-                for(int j = 0; j< listaOrdenada.Count; j++)
+                for (int j = 0; j < listaOrdenada.Count; j++)
                 {
-                    if (listaRespuestas[i][0] < listaOrdenada[j][0]&&!added)
+                    if (listaRespuestas[i][0] < listaOrdenada[j][0] && !added)
                     {
                         listaOrdenada.Insert(j, listaRespuestas[i]);
                         added = true;
@@ -159,11 +157,11 @@ namespace CorrelacionadorMir
 
 
         }
-        private void verificadorRespuestas( List<Pregunta> preguntillas, List<int[]> respuestillas)
+        private void verificadorRespuestas(List<Pregunta> preguntillas, List<int[]> respuestillas)
         {
-            for (int i = 0; i< preguntillas.Count; i++)
+            for (int i = 0; i < preguntillas.Count; i++)
             {
-                if(respuestillas[i][1]!= 0)
+                if (respuestillas[i][1] != 0)
                 {
                     preguntillas[i].respuestas[respuestillas[i][1] - 1].correcta = true;
                 }

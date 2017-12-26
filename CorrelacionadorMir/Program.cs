@@ -11,9 +11,21 @@ namespace CorrelacionadorMir
     {
         static List<Pregunta> preguntas = new List<Pregunta>();
         static List<Respuesta> respuestas = new List<Respuesta>();
+        static List<Year> years = new List<Year>();
         static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.Default;
+            for(int i = 2004; i<2017; i++)
+            {
+                Year year = new Year(i);
+                Console.WriteLine(i.ToString());
+                for (int j = 0; j< year.preguntas.Count; j++)
+                {
+                    Console.WriteLine(year.preguntas[j].texto);
+                }
+                years.Add(year);
+            }
+            /*
             List<string> listaEnun = ReadFile("Mir/Preguntas2016.txt");
 
             CreaPreguntas(listaEnun);
@@ -27,7 +39,7 @@ namespace CorrelacionadorMir
             {
                 Console.WriteLine(respuestas[i].texto);
             }
-
+            */
             Console.ReadLine();
         }
         static private void WriteFile(String[] content, String _filename)
