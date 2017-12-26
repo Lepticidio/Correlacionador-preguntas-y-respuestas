@@ -4,135 +4,130 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace CorrelacionadorMir
 {
     class Program
     {
-        static List<Pregunta> preguntas = new List<Pregunta>();
-        static List<Respuesta> respuestas = new List<Respuesta>();
+
         static List<Year> years = new List<Year>();
+        static List<Palabra> palabras = new List<Palabra>();
         static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.Default;
-            for(int i = 2004; i<2017; i++)
+            for(int i = 2016; i<2017; i++)
             {
                 Year year = new Year(i);
-                Console.WriteLine(i.ToString());
+                years.Add(year);
                 for (int j = 0; j< year.preguntas.Count; j++)
                 {
-                    Console.WriteLine(year.preguntas[j].texto);
+                    string[] palabritas = GetWords(year.preguntas[j].texto);
+                    foreach (string pal in palabritas)
+                    {
+
+                        bool repetida = false;
+                        for (int k = 0; k < palabras.Count; k++)
+                        {
+                            if (palabras[k].texto == pal)
+                            {
+                                repetida = true;
+                                Correlacionador(palabras[k], year.preguntas[j]);
+                                break;
+                            }
+                        }
+                        if (!repetida)
+                        {                            
+                           Palabra pa =  new Palabra(pal);
+                           Correlacionador(pa, year.preguntas[j]);
+                           palabras.Add(pa);
+                        }
+                    }                    
                 }
-                years.Add(year);
             }
-            /*
-            List<string> listaEnun = ReadFile("Mir/Preguntas2016.txt");
-
-            CreaPreguntas(listaEnun);
-
-            for (int i=0; i< preguntas.Count; i++)
+            int contador = 0;
+            foreach (Palabra pa in palabras)
             {
-                Console.WriteLine(preguntas[i].texto);
-            }
+                if (contador > 100)
+                {
+                    break;
+                }
+                contador++;
+                Console.WriteLine(contador.ToString() + " -> " +  pa.texto);
+                foreach (Correlation corr in pa.correlaciones)
+                {
+                    Console.WriteLine(corr.texto + " : Porcentaje: " + corr.porcentaje + "%, Total: " + corr.Total
+                        + ", Ponderado: " + corr.porcentajePonderado + ", Positivas: " + corr.vecesPositivas
+                        + ", Negativas: " + corr.vecesNegativas);
+                }
 
-            for (int i = 0; i < respuestas.Count; i++)
-            {
-                Console.WriteLine(respuestas[i].texto);
             }
-            */
+            
             Console.ReadLine();
         }
-        static private void WriteFile(String[] content, String _filename)
+        static string[] GetWords(string input)
         {
-            for (int i = 0; i < content.Length; i++)
-            {
-                
-            }
-            File.WriteAllLines(@_filename, content);
-        }
-        static private List<string> ReadFile(String _filename)
-        {
-            // Array de strings formado por las distintas líneas de texto que haya en el documento
-            String[] content = File.ReadAllLines(@_filename, Encoding.Default);
+            MatchCollection matches = Regex.Matches(input, @"\b[\w']*\b");
 
-            List<string> listaEnunciados = new List<string>();
-            int contador = 0;
-            for (int i = 0; i< content.Length; i++)
-            {
+            var words = from m in matches.Cast<Match>()
+                        where !string.IsNullOrEmpty(m.Value)
+                        select TrimSuffix(m.Value);
 
-                if (contador>= listaEnunciados.Count)
-                {
-                    listaEnunciados.Add (content[i]);
-                }
-                else
-                {
-                    if ( empiezaConNumeroPunto(content[i]) )
-                    {
-                        contador++;
-                        listaEnunciados.Add(content[i]);
-                    }
-                    else
-                    {
-                        String[] aUnir = { listaEnunciados[contador], content[i] };
-                        listaEnunciados[contador] =  String.Join(" ", aUnir);
-                    }
-                }
-                
-            }
-            return listaEnunciados;
+            return words.ToArray();
         }
-        static private bool empiezaConNumeroPunto(string entrada)
+
+        static string TrimSuffix(string word)
         {
-            if (entrada.Length > 3 && Char.IsNumber(entrada[0]) && ((entrada[1] == '.' && entrada[2] == ' ')|| (Char.IsNumber(entrada[1]) && entrada[2] == '.' && entrada[3] == ' ') ||
-                (Char.IsNumber(entrada[1]) && Char.IsNumber(entrada[2]) && entrada[3] == '.' && entrada[4] == ' ')))
+            int apostropheLocation = word.IndexOf('\'');
+            if (apostropheLocation != -1)
             {
-                return true;
+                word = word.Substring(0, apostropheLocation);
             }
-            else
-            {
-                return false;
-            }
+
+            return word;
         }
-        static private void CreaPreguntas(List<string> enunciados)
+        static void Correlacionador ( Palabra pal, Pregunta pre)
         {
-            int contaPreguntas = 0;
-            for(int i=0; i< enunciados.Count; i++)
+            for (int i=0; i< pre.respuestas.Count; i++)
             {
-                if(i< enunciados.Count - 1)
+                string[] palabritas = GetWords(pre.respuestas[i].texto);
+                foreach (string pa in palabritas)
                 {
-                    if(enunciados[i+1][0]=='1'&& enunciados[i+1][1]== '.' && enunciados[i + 1][2] == ' ')
+                    bool repetido = false;
+                    for (int j = 0; j < pal.correlaciones.Count; j++)
                     {
-                        contaPreguntas++;
-                        Pregunta pregunta = new Pregunta(enunciados[i]);
-                        pregunta.numero = contaPreguntas;
-                        preguntas.Add(pregunta);
-                    }
-                    else
-                    {
-                        Respuesta respuesta = new Respuesta(enunciados[i]);
-                        respuesta.numero = enunciados[i][0];
-                        respuesta.pregunta = preguntas[contaPreguntas - 1];
-                        respuesta.pregunta.respuestas.Add(respuesta);
-                        respuestas.Add(new Respuesta(enunciados[i]));
                         
+                        if (pa == pal.correlaciones[j].texto)
+                        {
+                            repetido = true;
+                            if (pre.respuestas[i].correcta)
+                            {
+                                pal.correlaciones[j].vecesPositivas++;
+                            }
+                            else
+                            {
+                                pal.correlaciones[j].vecesNegativas++;
+                            }
+                            pal.correlaciones[j].Actualizar();
+                        }
                     }
-                }
-                else
-                {
-                    Respuesta respuesta = new Respuesta(enunciados[i]);
-                    respuesta.pregunta = preguntas[contaPreguntas - 1];
-                    respuesta.pregunta.respuestas.Add(respuesta);
-                    respuestas.Add(new Respuesta(enunciados[i]));
-                }
+                    if (!repetido)
+                    {
+                        Correlation corr = new Correlation(pa);
+                        if (pre.respuestas[i].correcta)
+                        {
+                            corr.vecesPositivas++;
+                        }
+                        else
+                        {
+                            corr.vecesNegativas++;
+                        }
+                        corr.Actualizar();
+
+                        pal.correlaciones.Add(corr);
+                    }
+                }                
             }
-
-
         }
-        /*
-        static private verificadorRespuesta(int year, int nPregunta, int nRespuesta)
-        {
-
-        }
-        */
     }
 }

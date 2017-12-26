@@ -21,7 +21,6 @@ namespace CorrelacionadorMir
             List<int[]> respuestas = ReadRespuestas("Mir/Respuestas" + number.ToString() + ".txt");
             verificadorRespuestas(preguntas, respuestas);
             
-            Console.ReadLine();
         }
         private void WriteFile(String[] content, String _filename)
         {
