@@ -5,3 +5,10 @@ C:\Users\Usuario\Miguel\Aplicaciones\CorrelacionadorMir\CorrelacionadorMir\obj\D
 C:\Users\Usuario\Miguel\Aplicaciones\CorrelacionadorMir\CorrelacionadorMir\obj\Debug\CorrelacionadorMir.csproj.CoreCompileInputs.cache
 C:\Users\Usuario\Miguel\Aplicaciones\CorrelacionadorMir\CorrelacionadorMir\obj\Debug\CorrelacionadorMir.exe
 C:\Users\Usuario\Miguel\Aplicaciones\CorrelacionadorMir\CorrelacionadorMir\obj\Debug\CorrelacionadorMir.pdb
+C:\Users\Usuario\Miguel\Aplicaciones\Correlacionador preguntas y respuestas\CorrelacionadorMir\obj\Debug\CorrelacionadorMir.csprojResolveAssemblyReference.cache
+C:\Users\Usuario\Miguel\Aplicaciones\Correlacionador preguntas y respuestas\CorrelacionadorMir\obj\Debug\CorrelacionadorMir.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\Miguel\Aplicaciones\Correlacionador preguntas y respuestas\CorrelacionadorMir\obj\Debug\CorrelacionadorMir.exe
+C:\Users\Usuario\Miguel\Aplicaciones\Correlacionador preguntas y respuestas\CorrelacionadorMir\obj\Debug\CorrelacionadorMir.pdb
+C:\Users\Usuario\Miguel\Aplicaciones\Correlacionador preguntas y respuestas\CorrelacionadorMir\bin\Debug\CorrelacionadorMir.exe.config
+C:\Users\Usuario\Miguel\Aplicaciones\Correlacionador preguntas y respuestas\CorrelacionadorMir\bin\Debug\CorrelacionadorMir.exe
+C:\Users\Usuario\Miguel\Aplicaciones\Correlacionador preguntas y respuestas\CorrelacionadorMir\bin\Debug\CorrelacionadorMir.pdb

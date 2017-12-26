@@ -116,11 +116,11 @@ namespace CorrelacionadorMir
 
 
         }
-
+        /*
         static private verificadorRespuesta(int year, int nPregunta, int nRespuesta)
         {
 
         }
-
+        */
     }
 }
